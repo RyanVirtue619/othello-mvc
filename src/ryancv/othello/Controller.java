@@ -1,4 +1,4 @@
-package com.mrjaffesclass.apcs.mvc.template;
+package ryancv.othello;
 import com.mrjaffesclass.apcs.messenger.*;
 
 /**
