@@ -33,7 +33,12 @@ public class Model implements MessageHandler {
                 board1[j] = "";
             }
         }
-        this.whoseMove = false;
+        this.board[3][3] = "X";
+        this.board[4][4] = "X";
+        this.board[3][4] = "O";
+        this.board[4][3] = "O";
+        this.mvcMessaging.notify("boardChange", this.board); 
+        this.whoseMove = true;
         this.gameOver = false;
     }
   
@@ -59,13 +64,26 @@ public class Model implements MessageHandler {
         return "draw";
     }
     
+    private void makeMove(int row, int col) {
+        this.board[row][col] = (this.whoseMove) ? "X" : "O";
+        this.mvcMessaging.notify("boardChange", this.board);
+        this.whoseMove ^= true;
+        this.mvcMessaging.notify("turnChange", this.whoseMove);
+        if(!isGameOver().equals("")) {
+            gameOver = true;
+            mvcMessaging.notify("gameOver", isGameOver());
+        }
+    }
+    
     @Override
     public void messageHandler(String messageName, Object messagePayload) {
         if(messageName.equals("moveMade")) {
             String position = (String) messagePayload;
             Integer row = Integer.valueOf(position.substring(0, 1));
             Integer col = Integer.valueOf(position.substring(1, 2));
-            System.out.println(row + " " + col);
+            if(this.board[row][col].equals("")) {
+               makeMove(row, col);
+            }
         }
     }
 }
