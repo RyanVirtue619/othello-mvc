@@ -300,6 +300,7 @@ public class View extends javax.swing.JFrame implements MessageHandler {
         jButton_07 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Othello - RyanV");
         setFocusable(false);
         setName(""); // NOI18N
 
