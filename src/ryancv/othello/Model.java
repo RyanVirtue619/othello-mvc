@@ -40,14 +40,14 @@ public class Model implements MessageHandler {
                 board1[j] = false;
             }
         }
-        this.board[3][3] = 1;
-        this.board[4][4] = 1;
-        this.board[3][4] = -1;
-        this.board[4][3] = -1;
-        this.legalMoves[2][4] = true;
-        this.legalMoves[3][5] = true;
-        this.legalMoves[4][2] = true;
-        this.legalMoves[5][3] = true;
+        this.board[3][3] = -1;
+        this.board[4][4] = -1;
+        this.board[3][4] = 1;
+        this.board[4][3] = 1;
+        this.legalMoves[2][3] = true;
+        this.legalMoves[5][4] = true;
+        this.legalMoves[4][5] = true;
+        this.legalMoves[3][2] = true;
         this.whoseMove = true;
         this.mvcMessaging.notify("turnChange", this.whoseMove);
         this.mvcMessaging.notify("discCount", discs());
@@ -62,6 +62,13 @@ public class Model implements MessageHandler {
                 if(val) return -10;
             }
         }
+	whoseMove ^= true;
+	for(boolean[] legalRow : legalMoves) {
+            for(boolean val : legalRow) {
+                if(val) return -10;
+            }
+        }
+	whoseMove ^= true;
         int[] discs = discs();
         int p1Count = discs[0];
         int p2Count = discs[1];
@@ -120,6 +127,24 @@ public class Model implements MessageHandler {
                 legalMoves[i][j] = isLegalMove(i, j);
             }
         }
+	boolean testLegal = false;
+	for(boolean[] legalRow : legalMoves) {
+            for(boolean val : legalRow) {
+                if(val) testLegal = true;
+            }
+        }
+	
+	if(!testLegal) {
+		whoseMove ^= whoseMove;
+		for(int i = 0; i < Constants.boardSize; i++) {
+			for(int j = 0; j < Constants.boardSize; j++) {
+				legalMoves[i][j] = isLegalMove(i, j);
+			}
+		}
+	}
+	
+	
+	
        int blackCount = 0;
        int whiteCount = 0;
        

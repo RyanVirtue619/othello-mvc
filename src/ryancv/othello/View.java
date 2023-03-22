@@ -303,6 +303,7 @@ public class View extends javax.swing.JFrame implements MessageHandler {
         setTitle("Othello - RyanV");
         setFocusable(false);
         setName(""); // NOI18N
+        setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 36)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
