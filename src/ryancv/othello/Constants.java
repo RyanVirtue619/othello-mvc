@@ -11,4 +11,5 @@ package ryancv.othello;
 public class Constants {
 
     public static final int[][] dirs = {{0, 1},{1, 1},{1, 0},{1, -1},{0 ,-1},{-1, -1},{-1, 0},{-1 ,1}};
+    public static final int boardSize = 8;
 }

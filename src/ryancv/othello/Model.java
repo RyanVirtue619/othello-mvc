@@ -1,6 +1,8 @@
 package ryancv.othello;
 
 import com.mrjaffesclass.apcs.messenger.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Model implements MessageHandler {
 
@@ -10,12 +12,14 @@ public class Model implements MessageHandler {
     //Data
     private boolean whoseMove;
     private boolean gameOver;
-    String[][] board;
+    int[][] board;
+    boolean[][] legalMoves;
 
 
     public Model(Messenger messages) {
       mvcMessaging = messages;
-      this.board = new String[8][8];
+      this.board = new int[8][8];
+      this.legalMoves = new boolean[8][8];
     }
 
     /**
@@ -28,51 +32,167 @@ public class Model implements MessageHandler {
     }
 
     private void newGame() {
-        for (String[] board1 : this.board) {
+        for (int[] board1 : this.board) {
             for (int j = 0; j < this.board[0].length; j++) {
-                board1[j] = "";
+                board1[j] = 0;
             }
         }
-        this.board[3][3] = "X";
-        this.board[4][4] = "X";
-        this.board[3][4] = "O";
-        this.board[4][3] = "O";
-        this.mvcMessaging.notify("boardChange", this.board); 
+        for (boolean[] board1 : this.legalMoves) {
+            for (int j = 0; j < this.legalMoves[0].length; j++) {
+                board1[j] = false;
+            }
+        }
+        this.board[3][3] = 1;
+        this.board[4][4] = 1;
+        this.board[3][4] = -1;
+        this.board[4][3] = -1;
+        this.legalMoves[2][4] = true;
+        this.legalMoves[3][5] = true;
+        this.legalMoves[4][2] = true;
+        this.legalMoves[5][3] = true;
         this.whoseMove = true;
         this.gameOver = false;
+        this.mvcMessaging.notify("turnChange", this.whoseMove);
+        this.mvcMessaging.notify("discCount", discs());
+        this.mvcMessaging.notify("boardChange", this.board); 
+        this.mvcMessaging.notify("legalMoves", this.legalMoves); 
+
     }
   
-    private String isGameOver() {
+    private int isGameOver() {
+        for(boolean[] legalRow : legalMoves) {
+            for(boolean val : legalRow) {
+                if(val) return -10;
+            }
+        }
         int p1Count = 0;
         int p2Count = 0;
-        for (String[] board1 : this.board) {
+        for (int[] board1 : this.board) {
             for (int j = 0; j < this.board[0].length; j++) {
-                if(board1[j].equals("X")) {
+                if(board1[j] == 1) {
                     p1Count++;
-                } else if (board1[j].equals("O")) {
+                } else if (board1[j] == -1) {
                     p2Count++;
-                } else {
-                    return "";
                 }
             }
         }
         if(p1Count > p2Count) {
-            return "X";
+            return 1;
         } else if (p2Count > p1Count) {
-            return "O";
+            return -1;
         }
-        return "draw";
+        return 0;
+    }
+    
+    private void updateBoard(int row, int col) {
+        int[] pos = new int[2];
+        HashMap<Integer, int[]> passed = new HashMap<Integer, int[]>();
+        int square = this.board[row][col];
+        System.out.println(square);
+        for(int[] dir : Constants.dirs) {
+            pos[0] = row;
+            pos[1] = col;
+            passed = new HashMap<>();
+            addVector(dir, pos);
+            while(inBounds(pos) && getItem(pos) == square * -1) {
+                passed.put(getItem(pos), new int[] {pos[0], pos[1]});
+                addVector(dir, pos);
+            }
+            if(inBounds(pos) && getItem(pos) != 0) {
+                updateSquares(pos, new int[] {row, col}, dir);
+            }
+        }
+    }
+    
+    private void updateSquares(int[] to, int[] from, int[] dir ) {
+        printBoard();
+        addVector(dir, from);
+        while(from[0] != to[0] || from[1] != to[1]) {
+            this.board[from[0]][from[1]] = this.board[from[0]][from[1]] * -1;
+            addVector(dir, from);
+        }
+        printBoard();
+    }
+    
+    private void printBoard() {
+        for(int[] i : board) {
+            for(int j: i) {
+                System.out.print(j);
+            }
+            System.out.println();
+        }
+    }
+    
+    private int[] discs() {
+        int blackCount = 0;
+        int whiteCount = 0;
+        for(int[] ro : this.board) {
+           for(int num : ro) {
+               if(num == 1) blackCount++;
+               if(num == -1) whiteCount++;
+           }
+       }
+        return new int[] {blackCount, whiteCount};
     }
     
     private void makeMove(int row, int col) {
-        this.board[row][col] = (this.whoseMove) ? "X" : "O";
+        this.board[row][col] = (this.whoseMove) ? 1 : -1;
+        updateBoard(row, col);
+        for(int i = 0; i < Constants.boardSize; i++) {
+            for(int j = 0; j < Constants.boardSize; j++) {
+                legalMoves[i][j] = isLegalMove(i, j);
+            }
+        }
+       int blackCount = 0;
+       int whiteCount = 0;
+       
+       int[] discs = {blackCount, whiteCount};
+       this.mvcMessaging.notify("discCount", discs());
         this.mvcMessaging.notify("boardChange", this.board);
+        this.mvcMessaging.notify("legalMoves", this.legalMoves);
         this.whoseMove ^= true;
+   
         this.mvcMessaging.notify("turnChange", this.whoseMove);
-        if(!isGameOver().equals("")) {
+        if(isGameOver() != -10) {
             gameOver = true;
             mvcMessaging.notify("gameOver", isGameOver());
         }
+    }
+    
+    public boolean isLegalMove(int row, int col) {
+        int[] pos = new int[2];
+        HashMap<Integer, int[]> passed = new HashMap<Integer, int[]>();
+        int player = whoseMove ? -1 : 1;
+        if(this.board[row][col] != 0) return false;
+        for(int[] dir : Constants.dirs) {
+            pos[0] = row;
+            pos[1] = col;
+            passed = new HashMap< Integer, int[]>();
+            addVector(dir, pos);
+            while(inBounds(pos) && getItem(pos) == player * -1) {
+                passed.put(getItem(pos), dir);
+                addVector(dir, pos);
+            }
+            if(inBounds(pos)) {
+                passed.put(getItem(pos), dir);
+            }
+            if(passed.containsKey(player) && passed.containsKey(player * -1)) return true;
+        }
+        return false;
+    }
+    
+    private int getItem(int[] pos) {
+        return this.board[pos[0]][pos[1]];
+    }
+    
+    private boolean inBounds(int[] pos) {
+        return (pos[0] >= 0 && pos[0] < Constants.boardSize) && (pos[1] >= 0 && pos[1] < Constants.boardSize);
+    }
+    
+    
+    private void addVector(int[] vector, int[] pos) {
+        pos[0] += vector[0];
+        pos[1] += vector[1];
     }
     
     @Override
@@ -81,9 +201,11 @@ public class Model implements MessageHandler {
             String position = (String) messagePayload;
             Integer row = Integer.valueOf(position.substring(0, 1));
             Integer col = Integer.valueOf(position.substring(1, 2));
-            if(this.board[row][col].equals("")) {
+            if(board[row][col] == 0  && legalMoves[row][col]) {
                makeMove(row, col);
             }
+        } else if (messageName.equals("newGame")) {
+            newGame();
         }
     }
 }

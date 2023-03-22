@@ -1,6 +1,10 @@
 package ryancv.othello;
 import com.mrjaffesclass.apcs.messenger.*;
 import java.awt.Color;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 /**
  * MVC Template
@@ -31,151 +35,184 @@ public class View extends javax.swing.JFrame implements MessageHandler {
     this.mvcMessaging.subscribe("boardChange", this);
     this.mvcMessaging.subscribe("gameOver", this);
     this.mvcMessaging.subscribe("turnChange", this);
+    this.mvcMessaging.subscribe("legalMoves", this);
+    this.mvcMessaging.subscribe("discCount", this);
   }
   
-  private Color getColor(String str) {
-      if(str.equals("X")) return Color.black;
-      if(str.equals("O")) return Color.white;
-      return Color.black;
+  private Color getColor(int num) {
+      if(num == 1) return Color.black;
+      if(num == -1) return Color.white;
+      return Color.green.darker().darker();
   }
   
-  private void updateButton(String str, JButton button) {
-      button.setText(str);
-      button.setForeground(getColor(str));
+  
+  private void updateButton(int row, int col, JButton button, int[][] board) {
+      button.setForeground(getColor(board[row][col]));
+      button.setBackground(getColor(board[row][col]));
+      button.setOpaque(true);
+      button.setBorderPainted(false);
+  }
+  
+  private void updateLegal(int row, int col , JButton button, boolean[][] legals) {
+      if(legals[row][col]) button.setBackground(button.getBackground().brighter());
   }
   
     @Override
     public void messageHandler(String messageName, Object messagePayload) {
         if(messageName.equals("boardChange")) {
-            String[][] board = (String[][]) messagePayload;
-            updateButton(board[0][0], jButton_00);
-            updateButton(board[0][1], jButton_01);
-            updateButton(board[0][2], jButton_02);
-            updateButton(board[0][3], jButton_03);
-            updateButton(board[0][4], jButton_04);
-            updateButton(board[0][5], jButton_05);
-            updateButton(board[0][6], jButton_06);
-            updateButton(board[0][7], jButton_07);
-            updateButton(board[1][0], jButton_10);
-            updateButton(board[1][1], jButton_11);
-            updateButton(board[1][2], jButton_12);
-            updateButton(board[1][3], jButton_13);
-            updateButton(board[1][4], jButton_14);
-            updateButton(board[1][5], jButton_15);
-            updateButton(board[1][6], jButton_16);
-            updateButton(board[1][7], jButton_17);
-            updateButton(board[2][0], jButton_20);
-            updateButton(board[2][1], jButton_21);
-            updateButton(board[2][2], jButton_22);
-            updateButton(board[2][3], jButton_23);
-            updateButton(board[2][4], jButton_24);
-            updateButton(board[2][5], jButton_25);
-            updateButton(board[2][6], jButton_26);
-            updateButton(board[2][7], jButton_27);
-            updateButton(board[3][0], jButton_30);
-            updateButton(board[3][1], jButton_31);
-            updateButton(board[3][2], jButton_32);
-            updateButton(board[3][3], jButton_33);
-            updateButton(board[3][4], jButton_34);
-            updateButton(board[3][5], jButton_35);
-            updateButton(board[3][6], jButton_36);
-            updateButton(board[3][7], jButton_37);
-            updateButton(board[4][0], jButton_40);
-            updateButton(board[4][1], jButton_41);
-            updateButton(board[4][2], jButton_42);
-            updateButton(board[4][3], jButton_43);
-            updateButton(board[4][4], jButton_44);
-            updateButton(board[4][5], jButton_45);
-            updateButton(board[4][6], jButton_46);
-            updateButton(board[4][7], jButton_47);
-            updateButton(board[5][0], jButton_50);
-            updateButton(board[5][1], jButton_51);
-            updateButton(board[5][2], jButton_52);
-            updateButton(board[5][3], jButton_53);
-            updateButton(board[5][4], jButton_54);
-            updateButton(board[5][5], jButton_55);
-            updateButton(board[5][6], jButton_56);
-            updateButton(board[5][7], jButton_57);
-            updateButton(board[6][0], jButton_60);
-            updateButton(board[6][1], jButton_61);
-            updateButton(board[6][2], jButton_62);
-            updateButton(board[6][3], jButton_63);
-            updateButton(board[6][4], jButton_64);
-            updateButton(board[6][5], jButton_65);
-            updateButton(board[6][6], jButton_66);
-            updateButton(board[6][7], jButton_67);
-            updateButton(board[7][0], jButton_70);
-            updateButton(board[7][1], jButton_71);
-            updateButton(board[7][2], jButton_72);updateButton(board[0][1], jButton_01);
-            updateButton(board[0][2], jButton_02);
-            updateButton(board[0][3], jButton_03);
-            updateButton(board[0][4], jButton_04);
-            updateButton(board[0][5], jButton_05);
-            updateButton(board[0][6], jButton_06);
-            updateButton(board[0][7], jButton_07);
-            updateButton(board[1][0], jButton_10);
-            updateButton(board[1][1], jButton_11);
-            updateButton(board[1][2], jButton_12);
-            updateButton(board[1][3], jButton_13);
-            updateButton(board[1][4], jButton_14);
-            updateButton(board[1][5], jButton_15);
-            updateButton(board[1][6], jButton_16);
-            updateButton(board[1][7], jButton_17);
-            updateButton(board[2][0], jButton_20);
-            updateButton(board[2][1], jButton_21);
-            updateButton(board[2][2], jButton_22);
-            updateButton(board[2][3], jButton_23);
-            updateButton(board[2][4], jButton_24);
-            updateButton(board[2][5], jButton_25);
-            updateButton(board[2][6], jButton_26);
-            updateButton(board[2][7], jButton_27);
-            updateButton(board[3][0], jButton_30);
-            updateButton(board[3][1], jButton_31);
-            updateButton(board[3][2], jButton_32);
-            updateButton(board[3][3], jButton_33);
-            updateButton(board[3][4], jButton_34);
-            updateButton(board[3][5], jButton_35);
-            updateButton(board[3][6], jButton_36);
-            updateButton(board[3][7], jButton_37);
-            updateButton(board[4][0], jButton_40);
-            updateButton(board[4][1], jButton_41);
-            updateButton(board[4][2], jButton_42);
-            updateButton(board[4][3], jButton_43);
-            updateButton(board[4][4], jButton_44);
-            updateButton(board[4][5], jButton_45);
-            updateButton(board[4][6], jButton_46);
-            updateButton(board[4][7], jButton_47);
-            updateButton(board[5][0], jButton_50);
-            updateButton(board[5][1], jButton_51);
-            updateButton(board[5][2], jButton_52);
-            updateButton(board[5][3], jButton_53);
-            updateButton(board[5][4], jButton_54);
-            updateButton(board[5][5], jButton_55);
-            updateButton(board[5][6], jButton_56);
-            updateButton(board[5][7], jButton_57);
-            updateButton(board[6][0], jButton_60);
-            updateButton(board[6][1], jButton_61);
-            updateButton(board[6][2], jButton_62);
-            updateButton(board[6][3], jButton_63);
-            updateButton(board[6][4], jButton_64);
-            updateButton(board[6][5], jButton_65);
-            updateButton(board[6][6], jButton_66);
-            updateButton(board[6][7], jButton_67);
-            updateButton(board[7][0], jButton_70);
-            updateButton(board[7][1], jButton_71);
-            updateButton(board[7][2], jButton_72);
-            updateButton(board[7][3], jButton_73);
-            updateButton(board[7][4], jButton_74);
-            updateButton(board[7][5], jButton_75);
-            updateButton(board[7][6], jButton_76);
-            updateButton(board[7][7], jButton_77);
-            updateButton(board[7][3], jButton_73);
-            updateButton(board[7][4], jButton_74);
-            updateButton(board[7][5], jButton_75);
-            updateButton(board[7][6], jButton_76);
-            updateButton(board[7][7], jButton_77);
+            int[][] board = (int[][]) messagePayload;
+            updateButton(0, 0, jButton_00, board);
+            updateButton(0, 1, jButton_01, board);
+            updateButton(0, 2, jButton_02, board);
+            updateButton(0, 3, jButton_03, board);
+            updateButton(0, 4, jButton_04, board);
+            updateButton(0, 5, jButton_05, board);
+            updateButton(0, 6, jButton_06, board);
+            updateButton(0, 7, jButton_07, board);
+            updateButton(1, 0, jButton_10, board);
+            updateButton(1, 1, jButton_11, board);
+            updateButton(1, 2, jButton_12, board);
+            updateButton(1, 3, jButton_13, board);
+            updateButton(1, 4, jButton_14, board);
+            updateButton(1, 5, jButton_15, board);
+            updateButton(1, 6, jButton_16, board);
+            updateButton(1, 7, jButton_17, board);
+            updateButton(2, 0, jButton_20, board);
+            updateButton(2, 1, jButton_21, board);
+            updateButton(2, 2, jButton_22, board);
+            updateButton(2, 3, jButton_23, board);
+            updateButton(2, 4, jButton_24, board);
+            updateButton(2, 5, jButton_25, board);
+            updateButton(2, 6, jButton_26, board);
+            updateButton(2, 7, jButton_27, board);
+            updateButton(3, 0, jButton_30, board);
+            updateButton(3, 1, jButton_31, board);
+            updateButton(3, 2, jButton_32, board);
+            updateButton(3, 3, jButton_33, board);
+            updateButton(3, 4, jButton_34, board);
+            updateButton(3, 5, jButton_35, board);
+            updateButton(3, 6, jButton_36, board);
+            updateButton(3, 7, jButton_37, board);
+            updateButton(4, 0, jButton_40, board);
+            updateButton(4, 1, jButton_41, board);
+            updateButton(4, 2, jButton_42, board);
+            updateButton(4, 3, jButton_43, board);
+            updateButton(4, 4, jButton_44, board);
+            updateButton(4, 5, jButton_45, board);
+            updateButton(4, 6, jButton_46, board);
+            updateButton(4, 7, jButton_47, board);
+            updateButton(5, 0, jButton_50, board);
+            updateButton(5, 1, jButton_51, board);
+            updateButton(5, 2, jButton_52, board);
+            updateButton(5, 3, jButton_53, board);
+            updateButton(5, 4, jButton_54, board);
+            updateButton(5, 5, jButton_55, board);
+            updateButton(5, 6, jButton_56, board);
+            updateButton(5, 7, jButton_57, board);
+            updateButton(6, 0, jButton_60, board);
+            updateButton(6, 1, jButton_61, board);
+            updateButton(6, 2, jButton_62, board);
+            updateButton(6, 3, jButton_63, board);
+            updateButton(6, 4, jButton_64, board);
+            updateButton(6, 5, jButton_65, board);
+            updateButton(6, 6, jButton_66, board);
+            updateButton(6, 7, jButton_67, board);
+            updateButton(7, 0, jButton_70, board);
+            updateButton(7, 1, jButton_71, board);
+            updateButton(7, 2, jButton_72, board);
+            updateButton(7, 3, jButton_73, board);
+            updateButton(7, 4, jButton_74, board);
+            updateButton(7, 5, jButton_75, board);
+            updateButton(7, 6, jButton_76, board);
+            updateButton(7, 7, jButton_77, board);
+        } else if (messageName.equals("legalMoves")) {
+            boolean[][] board = (boolean[][]) messagePayload;
+            for(boolean[] ro : board) {
+                for(boolean i : ro) {
+                    System.out.print((i) ? "1" : "0");
+                }
+                System.out.println();
+            }
+            updateLegal(0, 0, jButton_00, board);
+            updateLegal(0, 1, jButton_01, board);
+            updateLegal(0, 2, jButton_02, board);
+            updateLegal(0, 3, jButton_03, board);
+            updateLegal(0, 4, jButton_04, board);
+            updateLegal(0, 5, jButton_05, board);
+            updateLegal(0, 6, jButton_06, board);
+            updateLegal(0, 7, jButton_07, board);
+            updateLegal(1, 0, jButton_10, board);
+            updateLegal(1, 1, jButton_11, board);
+            updateLegal(1, 2, jButton_12, board);
+            updateLegal(1, 3, jButton_13, board);
+            updateLegal(1, 4, jButton_14, board);
+            updateLegal(1, 5, jButton_15, board);
+            updateLegal(1, 6, jButton_16, board);
+            updateLegal(1, 7, jButton_17, board);
+            updateLegal(2, 0, jButton_20, board);
+            updateLegal(2, 1, jButton_21, board);
+            updateLegal(2, 2, jButton_22, board);
+            updateLegal(2, 3, jButton_23, board);
+            updateLegal(2, 4, jButton_24, board);
+            updateLegal(2, 5, jButton_25, board);
+            updateLegal(2, 6, jButton_26, board);
+            updateLegal(2, 7, jButton_27, board);
+            updateLegal(3, 0, jButton_30, board);
+            updateLegal(3, 1, jButton_31, board);
+            updateLegal(3, 2, jButton_32, board);
+            updateLegal(3, 3, jButton_33, board);
+            updateLegal(3, 4, jButton_34, board);
+            updateLegal(3, 5, jButton_35, board);
+            updateLegal(3, 6, jButton_36, board);
+            updateLegal(3, 7, jButton_37, board);
+            updateLegal(4, 0, jButton_40, board);
+            updateLegal(4, 1, jButton_41, board);
+            updateLegal(4, 2, jButton_42, board);
+            updateLegal(4, 3, jButton_43, board);
+            updateLegal(4, 4, jButton_44, board);
+            updateLegal(4, 5, jButton_45, board);
+            updateLegal(4, 6, jButton_46, board);
+            updateLegal(4, 7, jButton_47, board);
+            updateLegal(5, 0, jButton_50, board);
+            updateLegal(5, 1, jButton_51, board);
+            updateLegal(5, 2, jButton_52, board);
+            updateLegal(5, 3, jButton_53, board);
+            updateLegal(5, 4, jButton_54, board);
+            updateLegal(5, 5, jButton_55, board);
+            updateLegal(5, 6, jButton_56, board);
+            updateLegal(5, 7, jButton_57, board);
+            updateLegal(6, 0, jButton_60, board);
+            updateLegal(6, 1, jButton_61, board);
+            updateLegal(6, 2, jButton_62, board);
+            updateLegal(6, 3, jButton_63, board);
+            updateLegal(6, 4, jButton_64, board);
+            updateLegal(6, 5, jButton_65, board);
+            updateLegal(6, 6, jButton_66, board);
+            updateLegal(6, 7, jButton_67, board);
+            updateLegal(7, 0, jButton_70, board);
+            updateLegal(7, 1, jButton_71, board);
+            updateLegal(7, 2, jButton_72, board);
+            updateLegal(7, 3, jButton_73, board);
+            updateLegal(7, 4, jButton_74, board);
+            updateLegal(7, 5, jButton_75, board);
+            updateLegal(7, 6, jButton_76, board);
+            updateLegal(7, 7, jButton_77, board);
         } else if (messageName.equals("turnChange")) {
             jLabel1.setText(((boolean) messagePayload ? "Black to move" : "White to move"));
+        } else if (messageName.equals("gameOver")) {
+            int winner = (int) messagePayload;
+            if(winner == 1) { 
+                jLabel1.setText("Black Wins!");
+            } else if (winner == -1) {
+                jLabel1.setText("White Wins!");
+            } else {
+                jLabel1.setText("Its a draw!");
+            }
+        } else if (messageName.equals("discCount")) {
+            int blackDiscs = ((int[]) messagePayload)[0];
+            int whiteDiscs = ((int[]) messagePayload)[1];
+            jLabel3.setText("White Pieces: " + whiteDiscs);
+            jLabel2.setText(blackDiscs + " :Black Pieces");
         }
     }
 
@@ -272,11 +309,14 @@ public class View extends javax.swing.JFrame implements MessageHandler {
         setFocusable(false);
         setName(""); // NOI18N
 
+        jLabel1.setFont(new java.awt.Font("Helvetica Neue", 0, 36)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Black to Move");
 
-        jLabel2.setText("Black Pieces:");
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel2.setText("2 :Black Pieces");
 
-        jLabel3.setText("White Pieces: ");
+        jLabel3.setText("White Pieces: 2");
 
         jLabel4.setFont(new java.awt.Font("Liberation Sans", 1, 36)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -285,17 +325,20 @@ public class View extends javax.swing.JFrame implements MessageHandler {
 
         jLabel5.setText("By Ryan V");
 
-        jButton1.setBackground(new java.awt.Color(155, 255, 255));
         jButton1.setText("New Game");
         jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jButton1.setFocusable(false);
+        jButton1.setMaximumSize(new java.awt.Dimension(150, 23));
+        jButton1.setMinimumSize(new java.awt.Dimension(150, 23));
+        jButton1.setPreferredSize(new java.awt.Dimension(150, 23));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 newGame(evt);
             }
         });
 
-        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
+        jPanel1.setBackground(new java.awt.Color(50, 50, 50));
+        jPanel1.setForeground(new java.awt.Color(255, 255, 255));
 
         jButton_06.setBackground(new java.awt.Color(79, 110, 63));
         jButton_06.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
@@ -915,6 +958,7 @@ public class View extends javax.swing.JFrame implements MessageHandler {
         jButton_35.setToolTipText("");
         jButton_35.setFocusable(false);
         jButton_35.setName("35"); // NOI18N
+        jButton_35.setOpaque(true);
         jButton_35.setPreferredSize(new java.awt.Dimension(50, 50));
         jButton_35.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -999,6 +1043,7 @@ public class View extends javax.swing.JFrame implements MessageHandler {
         jButton_14.setToolTipText("");
         jButton_14.setFocusable(false);
         jButton_14.setName("14"); // NOI18N
+        jButton_14.setOpaque(true);
         jButton_14.setPreferredSize(new java.awt.Dimension(50, 50));
         jButton_14.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1091,7 +1136,7 @@ public class View extends javax.swing.JFrame implements MessageHandler {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton_02, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton_03, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton_03, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton_04, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1208,16 +1253,20 @@ public class View extends javax.swing.JFrame implements MessageHandler {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton_00, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton_01, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton_02, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton_03, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton_04, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton_05, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton_06, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton_07, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton_07, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jButton_00, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton_01, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton_02, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton_04, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton_05, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton_06, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(jButton_03, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton_11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1307,43 +1356,38 @@ public class View extends javax.swing.JFrame implements MessageHandler {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButton1)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(6, 6, 6)
-                                        .addComponent(jLabel5)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel5))
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel1))
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
-                .addGap(76, 76, 76)
+                    .addComponent(jLabel2))
+                .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -1354,11 +1398,11 @@ public class View extends javax.swing.JFrame implements MessageHandler {
     private void onClick(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onClick
         JButton button = (JButton) evt.getSource();
         this.mvcMessaging.notify("moveMade", button.getName());
-        System.out.println(button.getText());
+        System.out.println(button.getBackground());
     }//GEN-LAST:event_onClick
 
     private void newGame(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newGame
-        // TODO add your handling code here:
+        this.mvcMessaging.notify("newGame");
     }//GEN-LAST:event_newGame
 
   /**
