@@ -54,7 +54,7 @@ public class View extends javax.swing.JFrame implements MessageHandler {
   }
   
   private void updateLegal(int row, int col , JButton button, boolean[][] legals) {
-      if(legals[row][col]) button.setBackground(button.getBackground().brighter());
+      if(legals[row][col]) button.setBackground(button.getBackground().brighter().brighter());
   }
   
     @Override
