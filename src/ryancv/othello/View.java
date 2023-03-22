@@ -329,12 +329,15 @@ public class View extends javax.swing.JFrame implements MessageHandler {
         jLabel5.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
         jLabel5.setText("By Ryan V");
 
+        jButton1.setBackground(new java.awt.Color(160, 220, 160));
         jButton1.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         jButton1.setText("New Game");
+        jButton1.setBorderPainted(false);
         jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jButton1.setFocusable(false);
         jButton1.setMaximumSize(new java.awt.Dimension(150, 23));
         jButton1.setMinimumSize(new java.awt.Dimension(150, 23));
+        jButton1.setOpaque(true);
         jButton1.setPreferredSize(new java.awt.Dimension(150, 23));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
