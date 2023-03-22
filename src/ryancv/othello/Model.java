@@ -65,17 +65,9 @@ public class Model implements MessageHandler {
                 if(val) return -10;
             }
         }
-        int p1Count = 0;
-        int p2Count = 0;
-        for (int[] board1 : this.board) {
-            for (int j = 0; j < this.board[0].length; j++) {
-                if(board1[j] == 1) {
-                    p1Count++;
-                } else if (board1[j] == -1) {
-                    p2Count++;
-                }
-            }
-        }
+        int[] discs = discs();
+        int p1Count = discs[0];
+        int p2Count = discs[1];
         if(p1Count > p2Count) {
             return 1;
         } else if (p2Count > p1Count) {
