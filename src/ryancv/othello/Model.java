@@ -2,7 +2,6 @@ package ryancv.othello;
 
 import com.mrjaffesclass.apcs.messenger.*;
 import java.util.HashMap;
-import java.util.Map;
 
 public class Model implements MessageHandler {
 
@@ -11,7 +10,6 @@ public class Model implements MessageHandler {
 
     //Data
     private boolean whoseMove;
-    private boolean gameOver;
     int[][] board;
     boolean[][] legalMoves;
 
@@ -51,7 +49,6 @@ public class Model implements MessageHandler {
         this.legalMoves[4][2] = true;
         this.legalMoves[5][3] = true;
         this.whoseMove = true;
-        this.gameOver = false;
         this.mvcMessaging.notify("turnChange", this.whoseMove);
         this.mvcMessaging.notify("discCount", discs());
         this.mvcMessaging.notify("boardChange", this.board); 
@@ -78,9 +75,8 @@ public class Model implements MessageHandler {
     
     private void updateBoard(int row, int col) {
         int[] pos = new int[2];
-        HashMap<Integer, int[]> passed = new HashMap<Integer, int[]>();
+        HashMap<Integer, int[]> passed = new HashMap<>();
         int square = this.board[row][col];
-        System.out.println(square);
         for(int[] dir : Constants.dirs) {
             pos[0] = row;
             pos[1] = col;
@@ -97,21 +93,10 @@ public class Model implements MessageHandler {
     }
     
     private void updateSquares(int[] to, int[] from, int[] dir ) {
-        printBoard();
         addVector(dir, from);
         while(from[0] != to[0] || from[1] != to[1]) {
             this.board[from[0]][from[1]] = this.board[from[0]][from[1]] * -1;
             addVector(dir, from);
-        }
-        printBoard();
-    }
-    
-    private void printBoard() {
-        for(int[] i : board) {
-            for(int j: i) {
-                System.out.print(j);
-            }
-            System.out.println();
         }
     }
     
@@ -146,7 +131,6 @@ public class Model implements MessageHandler {
    
         this.mvcMessaging.notify("turnChange", this.whoseMove);
         if(isGameOver() != -10) {
-            gameOver = true;
             mvcMessaging.notify("gameOver", isGameOver());
         }
     }
