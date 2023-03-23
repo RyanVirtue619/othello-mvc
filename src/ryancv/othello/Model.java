@@ -162,13 +162,13 @@ public class Model implements MessageHandler {
     
     public boolean isLegalMove(int row, int col) {
         int[] pos = new int[2];
-        HashMap<Integer, int[]> passed = new HashMap<Integer, int[]>();
+        HashMap<Integer, int[]> passed = new HashMap<>();
         int player = whoseMove ? -1 : 1;
         if(this.board[row][col] != 0) return false;
         for(int[] dir : Constants.dirs) {
             pos[0] = row;
             pos[1] = col;
-            passed = new HashMap< Integer, int[]>();
+            passed = new HashMap<>();
             addVector(dir, pos);
             while(inBounds(pos) && getItem(pos) == player * -1) {
                 passed.put(getItem(pos), dir);

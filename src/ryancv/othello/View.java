@@ -1,10 +1,6 @@
 package ryancv.othello;
 import com.mrjaffesclass.apcs.messenger.*;
 import java.awt.Color;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 /**
  * MVC Template
@@ -17,13 +13,23 @@ import javax.swing.JButton;
 public class View extends javax.swing.JFrame implements MessageHandler {
 
   private final Messenger mvcMessaging;
+  private final JButton[][] buttons;
   /**
    * Creates a new view
    * @param messages mvcMessaging object
    */
   public View(Messenger messages) {
     mvcMessaging = messages;   // Save the calling controller instance
+    
     initComponents();           // Create and init the GUI components
+    buttons = new JButton[][] { { jButton_00, jButton_01, jButton_02, jButton_03, jButton_04, jButton_05, jButton_06, jButton_07 },
+                                { jButton_10, jButton_11, jButton_12, jButton_13, jButton_14, jButton_15, jButton_16, jButton_17 },
+                                { jButton_20, jButton_21, jButton_22, jButton_23, jButton_24, jButton_25, jButton_26, jButton_27 },
+                                { jButton_30, jButton_31, jButton_32, jButton_33, jButton_34, jButton_35, jButton_36, jButton_37 },
+                                { jButton_40, jButton_41, jButton_42, jButton_43, jButton_44, jButton_45, jButton_46, jButton_47 },
+                                { jButton_50, jButton_51, jButton_52, jButton_53, jButton_54, jButton_55, jButton_56, jButton_57 },
+                                { jButton_60, jButton_61, jButton_62, jButton_63, jButton_64, jButton_65, jButton_66, jButton_67 },
+                                { jButton_70, jButton_71, jButton_72, jButton_73, jButton_74, jButton_75, jButton_76, jButton_77 }};
   }
   
   /**
@@ -51,6 +57,7 @@ public class View extends javax.swing.JFrame implements MessageHandler {
       button.setBackground(getColor(board[row][col]));
       button.setOpaque(true);
       button.setBorderPainted(false);
+      button.setToolTipText(null);
   }
   
   private void updateLegal(int row, int col , JButton button, boolean[][] legals) {
@@ -59,155 +66,50 @@ public class View extends javax.swing.JFrame implements MessageHandler {
   
     @Override
     public void messageHandler(String messageName, Object messagePayload) {
-        if(messageName.equals("boardChange")) {
-            int[][] board = (int[][]) messagePayload;
-            updateButton(0, 0, jButton_00, board);
-            updateButton(0, 1, jButton_01, board);
-            updateButton(0, 2, jButton_02, board);
-            updateButton(0, 3, jButton_03, board);
-            updateButton(0, 4, jButton_04, board);
-            updateButton(0, 5, jButton_05, board);
-            updateButton(0, 6, jButton_06, board);
-            updateButton(0, 7, jButton_07, board);
-            updateButton(1, 0, jButton_10, board);
-            updateButton(1, 1, jButton_11, board);
-            updateButton(1, 2, jButton_12, board);
-            updateButton(1, 3, jButton_13, board);
-            updateButton(1, 4, jButton_14, board);
-            updateButton(1, 5, jButton_15, board);
-            updateButton(1, 6, jButton_16, board);
-            updateButton(1, 7, jButton_17, board);
-            updateButton(2, 0, jButton_20, board);
-            updateButton(2, 1, jButton_21, board);
-            updateButton(2, 2, jButton_22, board);
-            updateButton(2, 3, jButton_23, board);
-            updateButton(2, 4, jButton_24, board);
-            updateButton(2, 5, jButton_25, board);
-            updateButton(2, 6, jButton_26, board);
-            updateButton(2, 7, jButton_27, board);
-            updateButton(3, 0, jButton_30, board);
-            updateButton(3, 1, jButton_31, board);
-            updateButton(3, 2, jButton_32, board);
-            updateButton(3, 3, jButton_33, board);
-            updateButton(3, 4, jButton_34, board);
-            updateButton(3, 5, jButton_35, board);
-            updateButton(3, 6, jButton_36, board);
-            updateButton(3, 7, jButton_37, board);
-            updateButton(4, 0, jButton_40, board);
-            updateButton(4, 1, jButton_41, board);
-            updateButton(4, 2, jButton_42, board);
-            updateButton(4, 3, jButton_43, board);
-            updateButton(4, 4, jButton_44, board);
-            updateButton(4, 5, jButton_45, board);
-            updateButton(4, 6, jButton_46, board);
-            updateButton(4, 7, jButton_47, board);
-            updateButton(5, 0, jButton_50, board);
-            updateButton(5, 1, jButton_51, board);
-            updateButton(5, 2, jButton_52, board);
-            updateButton(5, 3, jButton_53, board);
-            updateButton(5, 4, jButton_54, board);
-            updateButton(5, 5, jButton_55, board);
-            updateButton(5, 6, jButton_56, board);
-            updateButton(5, 7, jButton_57, board);
-            updateButton(6, 0, jButton_60, board);
-            updateButton(6, 1, jButton_61, board);
-            updateButton(6, 2, jButton_62, board);
-            updateButton(6, 3, jButton_63, board);
-            updateButton(6, 4, jButton_64, board);
-            updateButton(6, 5, jButton_65, board);
-            updateButton(6, 6, jButton_66, board);
-            updateButton(6, 7, jButton_67, board);
-            updateButton(7, 0, jButton_70, board);
-            updateButton(7, 1, jButton_71, board);
-            updateButton(7, 2, jButton_72, board);
-            updateButton(7, 3, jButton_73, board);
-            updateButton(7, 4, jButton_74, board);
-            updateButton(7, 5, jButton_75, board);
-            updateButton(7, 6, jButton_76, board);
-            updateButton(7, 7, jButton_77, board);
-        } else if (messageName.equals("legalMoves")) {
-            boolean[][] board = (boolean[][]) messagePayload;
-            updateLegal(0, 0, jButton_00, board);
-            updateLegal(0, 1, jButton_01, board);
-            updateLegal(0, 2, jButton_02, board);
-            updateLegal(0, 3, jButton_03, board);
-            updateLegal(0, 4, jButton_04, board);
-            updateLegal(0, 5, jButton_05, board);
-            updateLegal(0, 6, jButton_06, board);
-            updateLegal(0, 7, jButton_07, board);
-            updateLegal(1, 0, jButton_10, board);
-            updateLegal(1, 1, jButton_11, board);
-            updateLegal(1, 2, jButton_12, board);
-            updateLegal(1, 3, jButton_13, board);
-            updateLegal(1, 4, jButton_14, board);
-            updateLegal(1, 5, jButton_15, board);
-            updateLegal(1, 6, jButton_16, board);
-            updateLegal(1, 7, jButton_17, board);
-            updateLegal(2, 0, jButton_20, board);
-            updateLegal(2, 1, jButton_21, board);
-            updateLegal(2, 2, jButton_22, board);
-            updateLegal(2, 3, jButton_23, board);
-            updateLegal(2, 4, jButton_24, board);
-            updateLegal(2, 5, jButton_25, board);
-            updateLegal(2, 6, jButton_26, board);
-            updateLegal(2, 7, jButton_27, board);
-            updateLegal(3, 0, jButton_30, board);
-            updateLegal(3, 1, jButton_31, board);
-            updateLegal(3, 2, jButton_32, board);
-            updateLegal(3, 3, jButton_33, board);
-            updateLegal(3, 4, jButton_34, board);
-            updateLegal(3, 5, jButton_35, board);
-            updateLegal(3, 6, jButton_36, board);
-            updateLegal(3, 7, jButton_37, board);
-            updateLegal(4, 0, jButton_40, board);
-            updateLegal(4, 1, jButton_41, board);
-            updateLegal(4, 2, jButton_42, board);
-            updateLegal(4, 3, jButton_43, board);
-            updateLegal(4, 4, jButton_44, board);
-            updateLegal(4, 5, jButton_45, board);
-            updateLegal(4, 6, jButton_46, board);
-            updateLegal(4, 7, jButton_47, board);
-            updateLegal(5, 0, jButton_50, board);
-            updateLegal(5, 1, jButton_51, board);
-            updateLegal(5, 2, jButton_52, board);
-            updateLegal(5, 3, jButton_53, board);
-            updateLegal(5, 4, jButton_54, board);
-            updateLegal(5, 5, jButton_55, board);
-            updateLegal(5, 6, jButton_56, board);
-            updateLegal(5, 7, jButton_57, board);
-            updateLegal(6, 0, jButton_60, board);
-            updateLegal(6, 1, jButton_61, board);
-            updateLegal(6, 2, jButton_62, board);
-            updateLegal(6, 3, jButton_63, board);
-            updateLegal(6, 4, jButton_64, board);
-            updateLegal(6, 5, jButton_65, board);
-            updateLegal(6, 6, jButton_66, board);
-            updateLegal(6, 7, jButton_67, board);
-            updateLegal(7, 0, jButton_70, board);
-            updateLegal(7, 1, jButton_71, board);
-            updateLegal(7, 2, jButton_72, board);
-            updateLegal(7, 3, jButton_73, board);
-            updateLegal(7, 4, jButton_74, board);
-            updateLegal(7, 5, jButton_75, board);
-            updateLegal(7, 6, jButton_76, board);
-            updateLegal(7, 7, jButton_77, board);
-        } else if (messageName.equals("turnChange")) {
-            jLabel1.setText(((boolean) messagePayload ? "Black to move" : "White to move"));
-        } else if (messageName.equals("gameOver")) {
-            int winner = (int) messagePayload;
-            if(winner == 1) { 
-                jLabel1.setText("Black Wins!");
-            } else if (winner == -1) {
-                jLabel1.setText("White Wins!");
-            } else {
-                jLabel1.setText("Its a draw!");
-            }
-        } else if (messageName.equals("discCount")) {
-            int blackDiscs = ((int[]) messagePayload)[0];
-            int whiteDiscs = ((int[]) messagePayload)[1];
-            jLabel3.setText("Black Pieces: " + blackDiscs);
-            jLabel2.setText("White Pieces: " + whiteDiscs);
-        }
+      switch (messageName) {
+          case "boardChange":
+              {
+                  int[][] board = (int[][]) messagePayload;
+                  for(int i = 0; i < buttons.length; i++) {
+                      for(int j = 0; j < buttons.length; j++) {
+                          updateButton(i, j, buttons[i][j], board);
+                      }
+                  }     break;
+              }
+          case "legalMoves":
+              {
+                  boolean[][] board = (boolean[][]) messagePayload;
+                  for(int i = 0; i < buttons.length; i++) {
+                      for(int j = 0; j < buttons.length; j++) {
+                          updateLegal(i, j, buttons[i][j], board);
+                      }
+                  }     break;
+              }
+          case "turnChange":
+              jLabel1.setText(((boolean) messagePayload ? "Black to move" : "White to move"));
+              break;
+          case "gameOver":
+              int winner = (int) messagePayload;
+              switch (winner) {
+                  case 1:
+                      jLabel1.setText("Black Wins!");
+                      break;
+                  case -1:
+                      jLabel1.setText("White Wins!");
+                      break;
+                  default:
+                      jLabel1.setText("Its a draw!");
+                      break;
+              } break;
+          case "discCount":
+              int blackDiscs = ((int[]) messagePayload)[0];
+              int whiteDiscs = ((int[]) messagePayload)[1];
+              jLabel3.setText("Black Pieces: " + blackDiscs);
+              jLabel2.setText("White Pieces: " + whiteDiscs);
+              break;
+          default:
+              break;
+      }
     }
 
   /**
